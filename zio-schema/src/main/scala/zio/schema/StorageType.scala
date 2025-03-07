@@ -26,7 +26,7 @@ object StorageType extends Enum[StorageType] with CirceEnum[StorageType] with En
 
   case object Columnar extends StorageType
 
-  case object ElasticSearch extends StorageType
+  case object OpenSearch extends StorageType
 
   case object Ignite extends StorageType
 

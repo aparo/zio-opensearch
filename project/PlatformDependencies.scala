@@ -1,5 +1,4 @@
 import sbt._
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 
 object PlatformDependencies {
 
@@ -14,16 +13,16 @@ object PlatformDependencies {
   }
 
   object Libraries {
-    lazy val magnolia = Def.setting("com.propensive" %%% "magnolia" % "0.17.0")
-    lazy val shapeless = Def.setting("com.chuusai" %%% "shapeless" % "2.4.0-M1")
+    lazy val magnolia = Def.setting("com.propensive" %% "magnolia" % "0.17.0")
+    lazy val shapeless = Def.setting("com.chuusai" %% "shapeless" % "2.4.0-M1")
 
   }
 
   object ScalaTest {
     lazy val test =
-      Def.setting("org.scalatest" %%% "scalatest" % Versions.scalaTest)
+      Def.setting("org.scalatest" %% "scalatest" % Versions.scalaTest)
     lazy val scalactic =
-      Def.setting("org.scalactic" %%% "scalactic" % Versions.scalaTest)
+      Def.setting("org.scalactic" %% "scalactic" % Versions.scalaTest)
   }
   object Specs2 {
     lazy val core = Def.setting("org.specs2" %% "specs2-core" % Versions.specs2)
@@ -34,11 +33,11 @@ object PlatformDependencies {
       Def.setting("org.specs2" %% "specs2-scalacheck" % Versions.specs2)
   }
   object ZIO {
-    lazy val core = Def.setting("dev.zio" %%% "zio" % Versions.zio)
-    lazy val json = Def.setting("dev.zio" %%% "zio-json" % "0.5.0")
-    lazy val streams = Def.setting("dev.zio" %%% "zio-streams" % Versions.zio)
-    lazy val zioJsonExtra = Def.setting("io.megl" %%% "zio-json-extra" % Versions.zioJsonExtra)
-    lazy val zioJsonException = Def.setting("io.megl" %%% "zio-json-exception" % Versions.zioJsonExtra)
+    lazy val core = Def.setting("dev.zio" %% "zio" % Versions.zio)
+    lazy val json = Def.setting("dev.zio" %% "zio-json" % "0.7.39")
+    lazy val streams = Def.setting("dev.zio" %% "zio-streams" % Versions.zio)
+    lazy val zioJsonExtra = Def.setting("io.megl" %% "zio-json-extra" % Versions.zioJsonExtra)
+    lazy val zioJsonException = Def.setting("io.megl" %% "zio-json-exception" % Versions.zioJsonExtra)
   }
 
 }

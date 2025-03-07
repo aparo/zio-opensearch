@@ -29,11 +29,11 @@ trait StorageAnnotation extends StaticAnnotation {
   def metaName: String
 }
 
-final case class ElasticSearchStorage() extends StorageAnnotation {
-  override def value: String = "elasticsearch"
-  override def className: String = "ElasticSearchStorage"
-  override def modelClass: String = "_root_.zio.elasticsearch.orm.ElasticSearchDocument"
-  override def objectClass: String = "_root_.zio.elasticsearch.orm.ElasticSearchMeta"
+final case class OpenSearchStorage() extends StorageAnnotation {
+  override def value: String = "opensearch"
+  override def className: String = "OpenSearchStorage"
+  override def modelClass: String = "_root_.zio.opensearch.orm.OpenSearchDocument"
+  override def objectClass: String = "_root_.zio.opensearch.orm.OpenSearchMeta"
   def metaName: String = "_es"
 }
 

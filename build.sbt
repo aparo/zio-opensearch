@@ -1,4 +1,3 @@
-import sbtcrossproject.{ CrossType, crossProject }
 import ReleaseTransformations._
 import xerial.sbt.Sonatype._
 
@@ -10,7 +9,7 @@ inThisBuild(
     Compile / packageDoc / publishArtifact := false,
     packageDoc / publishArtifact := false,
     Compile / doc / sources := Seq.empty,
-    homepage := Some(url("https://github.com/aparo/zio-elasticsearch.git")),
+    homepage := Some(url("https://github.com/aparo/zio-opensearch.git")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
@@ -22,20 +21,19 @@ inThisBuild(
     ),
     versionScheme := Some("early-semver"),
     sonatypeProfileName := "io.megl",
-    publishMavenStyle := true,
     licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-    sonatypeProjectHosting := Some(GitHubHosting("aparo", "zio-elasticsearch", "alberto.paro@gmail.com")),
+    sonatypeProjectHosting := Some(GitHubHosting("aparo", "zio-opensearch", "alberto.paro@gmail.com"))
   )
 )
 
 val disableDocs = Seq[Setting[_]](
-  Compile / doc / sources                := Seq.empty,
+  Compile / doc / sources := Seq.empty,
   Compile / packageDoc / publishArtifact := false
 )
 
 val disablePublishing = Seq[Setting[_]](
   publishArtifact := false,
-  publish / skip  := true
+  publish / skip := true
 )
 
 val paradiseVersion = "2.1.1"
@@ -48,579 +46,322 @@ lazy val root =
     .in(file("."))
     .settings((publish / skip) := true)
     .aggregate(
-      `zio-common-jvm`,
-      `zio-common-js`,
-      `zio-schema-elasticsearch-jvm`,
-      `zio-schema-elasticsearch-js`,
-      `elasticsearch-core-jvm`,
-      `elasticsearch-core-js`,
-      `elasticsearch-async-search-jvm`,
-      `elasticsearch-async-search-js`,
-      `elasticsearch-autoscaling-jvm`,
-      `elasticsearch-autoscaling-js`,
-      `elasticsearch-cluster-jvm`,
-      `elasticsearch-cluster-js`,
-      `elasticsearch-ccr-jvm`,
-      `elasticsearch-ccr-js`,
-      `elasticsearch-dangling-indices-jvm`,
-      `elasticsearch-dangling-indices-js`,
-      `elasticsearch-enrich-jvm`,
-      `elasticsearch-enrich-js`,
-      `elasticsearch-eql-jvm`,
-      `elasticsearch-eql-js`,
-      `elasticsearch-features-jvm`,
-      `elasticsearch-features-js`,
-      `elasticsearch-fleet-jvm`,
-      `elasticsearch-fleet-js`,
-      `elasticsearch-graph-jvm`,
-      `elasticsearch-graph-js`,
-      `elasticsearch-indices-jvm`,
-      `elasticsearch-indices-js`,
-      `elasticsearch-ilm-jvm`,
-      `elasticsearch-ilm-js`,
-      `elasticsearch-ingest-jvm`,
-      `elasticsearch-ingest-js`,
-      `elasticsearch-license-jvm`,
-      `elasticsearch-license-js`,
-      `elasticsearch-logstash-jvm`,
-      `elasticsearch-logstash-js`,
-      `elasticsearch-migration-jvm`,
-      `elasticsearch-migration-js`,
-      `elasticsearch-ml-jvm`,
-      `elasticsearch-ml-js`,
-      `elasticsearch-monitoring-jvm`,
-      `elasticsearch-monitoring-js`,
-      `elasticsearch-nodes-jvm`,
-      `elasticsearch-nodes-js`,
-      `elasticsearch-rollup-jvm`,
-      `elasticsearch-rollup-js`,
-      `elasticsearch-searchable-snapshots-jvm`,
-      `elasticsearch-searchable-snapshots-js`,
-      `elasticsearch-security-jvm`,
-      `elasticsearch-security-js`,
-      `elasticsearch-shutdown-jvm`,
-      `elasticsearch-shutdown-js`,
-      `elasticsearch-slm-jvm`,
-      `elasticsearch-slm-js`,
-      `elasticsearch-snapshot-jvm`,
-      `elasticsearch-snapshot-js`,
-      `elasticsearch-sql-jvm`,
-      `elasticsearch-sql-js`,
-      `elasticsearch-ssl-jvm`,
-      `elasticsearch-ssl-js`,
-      `elasticsearch-tasks-jvm`,
-      `elasticsearch-tasks-js`,
-      `elasticsearch-text-structure-jvm`,
-      `elasticsearch-text-structure-js`,
-      `elasticsearch-transform-jvm`,
-      `elasticsearch-transform-js`,
-      `elasticsearch-watcher-jvm`,
-      `elasticsearch-watcher-js`,
-      `elasticsearch-xpack-jvm`,
-      `elasticsearch-xpack-js`,
-//      `elasticsearch-admin-jvm`,
-//      `elasticsearch-admin-js`,
-//      `elasticsearch-cat-jvm`,
-//      `elasticsearch-cat-js`,
+      `zio-common`,
+      `zio-schema-opensearch`,
+      `opensearch-core`,
+      `opensearch-cluster`,
+      `opensearch-dangling-indices`,
+      `opensearch-enrich`,
+      `opensearch-indices`,
+      `opensearch-ingest`,
+      `opensearch-migration`,
+      `opensearch-ml`,
+      `opensearch-monitoring`,
+      `opensearch-nodes`,
+      `opensearch-rollup`,
+      `opensearch-searchable-snapshots`,
+      `opensearch-security`,
+      `opensearch-shutdown`,
+      `opensearch-slm`,
+      `opensearch-snapshot`,
+      `opensearch-sql`,
+      `opensearch-ssl`,
+      `opensearch-tasks`,
+      `opensearch-text-structure`,
+      `opensearch-transform`,
+//      `opensearch-admin`,
+//      `opensearch-cat`,
 // custom managers
-      `elasticsearch-orm-jvm`,
-      `elasticsearch-orm-js`,
+      `opensearch-orm`,
       // Clients
-      `elasticsearch-client-sttp`,
-//      `elasticsearch-client-zio-http` //,
-//        `elasticsearch-tests`
-    ).settings(disableDocs).settings(disablePublishing)
+      `opensearch-client-sttp`
+//      `opensearch-client-zio-http` //,
+//        `opensearch-tests`
+    )
+    .settings(disableDocs)
+    .settings(disablePublishing)
 
 lazy val `zio-common` = ProjectUtils
-  .setupCrossModule("zio-common", CrossType.Full)
+  .setupProject("zio-common")
   .settings(
     moduleName := "zio-common"
   )
   .settings(Dependencies.zioCommon)
-//  .dependsOn(`zio-json-extra`)
 
-lazy val `zio-common-jvm` = `zio-common`.jvm
-lazy val `zio-common-js` = `zio-common`.js
-
-lazy val `zio-schema-elasticsearch` = ProjectUtils
-  .setupCrossModule("zio-schema-elasticsearch", CrossType.Pure)
+lazy val `zio-schema-opensearch` = ProjectUtils
+  .setupProject("zio-schema-opensearch")
   .settings(
-    moduleName := "zio-schema-elasticsearch"
+    moduleName := "zio-schema-opensearch"
   )
-  .settings(Dependencies.zioSchemaElasticsearch)
+  .settings(Dependencies.zioSchemaOpenSearch)
   .settings(Dependencies.testSupport)
   .dependsOn(`zio-common`)
 
-lazy val `zio-schema-elasticsearch-jvm` = `zio-schema-elasticsearch`.jvm
-lazy val `zio-schema-elasticsearch-js` = `zio-schema-elasticsearch`.js
-
-lazy val `elasticsearch-core` = ProjectUtils
-  .setupCrossModule("elasticsearch-core", CrossType.Pure)
+lazy val `opensearch-core` = ProjectUtils
+  .setupProject("opensearch-core")
   .settings(
-    moduleName := "zio-elasticsearch-core"
+    moduleName := "zio-opensearch-core"
   )
-  .dependsOn(`zio-schema-elasticsearch`)
+  .dependsOn(`zio-schema-opensearch`)
 
-lazy val `elasticsearch-core-jvm` = `elasticsearch-core`.jvm
-lazy val `elasticsearch-core-js` = `elasticsearch-core`.js
-
-lazy val `elasticsearch-async-search` = ProjectUtils
-  .setupCrossModule("elasticsearch-async-search", CrossType.Pure)
+lazy val `opensearch-cluster` = ProjectUtils
+  .setupProject("opensearch-cluster")
   .settings(
-    moduleName := "zio-elasticsearch-async-search"
+    moduleName := "zio-opensearch-cluster"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-ingest` % "test->test;compile->compile")
+  .dependsOn(`opensearch-indices` % "test->test;compile->compile")
 
-lazy val `elasticsearch-async-search-jvm` = `elasticsearch-async-search`.jvm
-lazy val `elasticsearch-async-search-js` = `elasticsearch-async-search`.js
-
-lazy val `elasticsearch-autoscaling` = ProjectUtils
-  .setupCrossModule("elasticsearch-autoscaling", CrossType.Pure)
+lazy val `opensearch-dangling-indices` = ProjectUtils
+  .setupProject("opensearch-dangling-indices")
   .settings(
-    moduleName := "zio-elasticsearch-autoscaling"
+    moduleName := "zio-opensearch-dangling-indices"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-autoscaling-jvm` = `elasticsearch-autoscaling`.jvm
-lazy val `elasticsearch-autoscaling-js` = `elasticsearch-autoscaling`.js
-
-lazy val `elasticsearch-cluster` = ProjectUtils
-  .setupCrossModule("elasticsearch-cluster", CrossType.Pure)
+lazy val `opensearch-enrich` = ProjectUtils
+  .setupProject("opensearch-enrich")
   .settings(
-    moduleName := "zio-elasticsearch-cluster"
+    moduleName := "zio-opensearch-enrich"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-ilm` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-ingest` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-cluster-jvm` = `elasticsearch-cluster`.jvm
-lazy val `elasticsearch-cluster-js` = `elasticsearch-cluster`.js
-
-lazy val `elasticsearch-ccr` = ProjectUtils
-  .setupCrossModule("elasticsearch-ccr", CrossType.Pure)
+lazy val `opensearch-indices` = ProjectUtils
+  .setupProject("opensearch-indices")
   .settings(
-    moduleName := "zio-elasticsearch-ccr"
+    moduleName := "zio-opensearch-indices"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-ccr-jvm` = `elasticsearch-ccr`.jvm
-lazy val `elasticsearch-ccr-js` = `elasticsearch-ccr`.js
-
-lazy val `elasticsearch-dangling-indices` = ProjectUtils
-  .setupCrossModule("elasticsearch-dangling-indices", CrossType.Pure)
+lazy val `opensearch-ingest` = ProjectUtils
+  .setupProject("opensearch-ingest")
   .settings(
-    moduleName := "zio-elasticsearch-dangling-indices"
+    moduleName := "zio-opensearch-ingest"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-dangling-indices-jvm` = `elasticsearch-dangling-indices`.jvm
-lazy val `elasticsearch-dangling-indices-js` = `elasticsearch-dangling-indices`.js
-
-lazy val `elasticsearch-enrich` = ProjectUtils
-  .setupCrossModule("elasticsearch-enrich", CrossType.Pure)
+lazy val `opensearch-migration` = ProjectUtils
+  .setupProject("opensearch-migration")
   .settings(
-    moduleName := "zio-elasticsearch-enrich"
+    moduleName := "zio-opensearch-migration"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-enrich-jvm` = `elasticsearch-enrich`.jvm
-lazy val `elasticsearch-enrich-js` = `elasticsearch-enrich`.js
-
-lazy val `elasticsearch-eql` = ProjectUtils
-  .setupCrossModule("elasticsearch-eql", CrossType.Pure)
+lazy val `opensearch-ml` = ProjectUtils
+  .setupProject("opensearch-ml")
   .settings(
-    moduleName := "zio-elasticsearch-eql"
+    moduleName := "zio-opensearch-ml"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-indices` % "test->test;compile->compile")
 
-lazy val `elasticsearch-eql-jvm` = `elasticsearch-eql`.jvm
-lazy val `elasticsearch-eql-js` = `elasticsearch-eql`.js
-
-lazy val `elasticsearch-features` = ProjectUtils
-  .setupCrossModule("elasticsearch-features", CrossType.Pure)
+lazy val `opensearch-monitoring` = ProjectUtils
+  .setupProject("opensearch-monitoring")
   .settings(
-    moduleName := "zio-elasticsearch-features"
+    moduleName := "zio-opensearch-monitoring"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-features-jvm` = `elasticsearch-features`.jvm
-lazy val `elasticsearch-features-js` = `elasticsearch-features`.js
-
-lazy val `elasticsearch-fleet` = ProjectUtils
-  .setupCrossModule("elasticsearch-fleet", CrossType.Pure)
+lazy val `opensearch-nodes` = ProjectUtils
+  .setupProject("opensearch-nodes")
   .settings(
-    moduleName := "zio-elasticsearch-fleet"
+    moduleName := "zio-opensearch-nodes"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-indices` % "test->test;compile->compile")
 
-lazy val `elasticsearch-fleet-jvm` = `elasticsearch-fleet`.jvm
-lazy val `elasticsearch-fleet-js` = `elasticsearch-fleet`.js
-
-lazy val `elasticsearch-graph` = ProjectUtils
-  .setupCrossModule("elasticsearch-graph", CrossType.Pure)
+lazy val `opensearch-rollup` = ProjectUtils
+  .setupProject("opensearch-rollup")
   .settings(
-    moduleName := "zio-elasticsearch-graph"
+    moduleName := "zio-opensearch-rollup"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-graph-jvm` = `elasticsearch-graph`.jvm
-lazy val `elasticsearch-graph-js` = `elasticsearch-graph`.js
-
-lazy val `elasticsearch-ilm` = ProjectUtils
-  .setupCrossModule("elasticsearch-ilm", CrossType.Pure)
+lazy val `opensearch-searchable-snapshots` = ProjectUtils
+  .setupProject("opensearch-searchable-snapshots")
   .settings(
-    moduleName := "zio-elasticsearch-ilm"
+    moduleName := "zio-opensearch-searchable-snapshots"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-indices` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-ilm-jvm` = `elasticsearch-ilm`.jvm
-lazy val `elasticsearch-ilm-js` = `elasticsearch-ilm`.js
-
-lazy val `elasticsearch-indices` = ProjectUtils
-  .setupCrossModule("elasticsearch-indices", CrossType.Pure)
+lazy val `opensearch-security` = ProjectUtils
+  .setupProject("opensearch-security")
   .settings(
-    moduleName := "zio-elasticsearch-indices"
+    moduleName := "zio-opensearch-security"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-indices-jvm` = `elasticsearch-indices`.jvm
-lazy val `elasticsearch-indices-js` = `elasticsearch-indices`.js
-
-lazy val `elasticsearch-ingest` = ProjectUtils
-  .setupCrossModule("elasticsearch-ingest", CrossType.Pure)
+lazy val `opensearch-shutdown` = ProjectUtils
+  .setupProject("opensearch-shutdown")
   .settings(
-    moduleName := "zio-elasticsearch-ingest"
+    moduleName := "zio-opensearch-shutdown"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-ingest-jvm` = `elasticsearch-ingest`.jvm
-lazy val `elasticsearch-ingest-js` = `elasticsearch-ingest`.js
-
-lazy val `elasticsearch-license` = ProjectUtils
-  .setupCrossModule("elasticsearch-license", CrossType.Pure)
+lazy val `opensearch-slm` = ProjectUtils
+  .setupProject("opensearch-slm")
   .settings(
-    moduleName := "zio-elasticsearch-license"
+    moduleName := "zio-opensearch-slm"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-license-jvm` = `elasticsearch-license`.jvm
-lazy val `elasticsearch-license-js` = `elasticsearch-license`.js
-
-lazy val `elasticsearch-logstash` = ProjectUtils
-  .setupCrossModule("elasticsearch-logstash", CrossType.Pure)
+lazy val `opensearch-snapshot` = ProjectUtils
+  .setupProject("opensearch-snapshot")
   .settings(
-    moduleName := "zio-elasticsearch-logstash"
+    moduleName := "zio-opensearch-snapshot"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-indices` % "test->test;compile->compile")
 
-lazy val `elasticsearch-logstash-jvm` = `elasticsearch-logstash`.jvm
-lazy val `elasticsearch-logstash-js` = `elasticsearch-logstash`.js
-
-lazy val `elasticsearch-migration` = ProjectUtils
-  .setupCrossModule("elasticsearch-migration", CrossType.Pure)
+lazy val `opensearch-sql` = ProjectUtils
+  .setupProject("opensearch-sql")
   .settings(
-    moduleName := "zio-elasticsearch-migration"
+    moduleName := "zio-opensearch-sql"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-migration-jvm` = `elasticsearch-migration`.jvm
-lazy val `elasticsearch-migration-js` = `elasticsearch-migration`.js
-
-lazy val `elasticsearch-ml` = ProjectUtils
-  .setupCrossModule("elasticsearch-ml", CrossType.Pure)
+lazy val `opensearch-ssl` = ProjectUtils
+  .setupProject("opensearch-ssl")
   .settings(
-    moduleName := "zio-elasticsearch-ml"
+    moduleName := "zio-opensearch-ssl"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-indices` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-ml-jvm` = `elasticsearch-ml`.jvm
-lazy val `elasticsearch-ml-js` = `elasticsearch-ml`.js
-
-lazy val `elasticsearch-monitoring` = ProjectUtils
-  .setupCrossModule("elasticsearch-monitoring", CrossType.Pure)
+lazy val `opensearch-tasks` = ProjectUtils
+  .setupProject("opensearch-tasks")
   .settings(
-    moduleName := "zio-elasticsearch-monitoring"
+    moduleName := "zio-opensearch-tasks"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-monitoring-jvm` = `elasticsearch-monitoring`.jvm
-lazy val `elasticsearch-monitoring-js` = `elasticsearch-monitoring`.js
-
-lazy val `elasticsearch-nodes` = ProjectUtils
-  .setupCrossModule("elasticsearch-nodes", CrossType.Pure)
+lazy val `opensearch-text-structure` = ProjectUtils
+  .setupProject("opensearch-text-structure")
   .settings(
-    moduleName := "zio-elasticsearch-nodes"
+    moduleName := "zio-opensearch-text-structure"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-indices` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 
-lazy val `elasticsearch-nodes-jvm` = `elasticsearch-nodes`.jvm
-lazy val `elasticsearch-nodes-js` = `elasticsearch-nodes`.js
-
-lazy val `elasticsearch-rollup` = ProjectUtils
-  .setupCrossModule("elasticsearch-rollup", CrossType.Pure)
+lazy val `opensearch-transform` = ProjectUtils
+  .setupProject("opensearch-transform")
   .settings(
-    moduleName := "zio-elasticsearch-rollup"
+    moduleName := "zio-opensearch-transform"
   )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-rollup-jvm` = `elasticsearch-rollup`.jvm
-lazy val `elasticsearch-rollup-js` = `elasticsearch-rollup`.js
-
-lazy val `elasticsearch-searchable-snapshots` = ProjectUtils
-  .setupCrossModule("elasticsearch-searchable-snapshots", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-searchable-snapshots"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-searchable-snapshots-jvm` = `elasticsearch-searchable-snapshots`.jvm
-lazy val `elasticsearch-searchable-snapshots-js` = `elasticsearch-searchable-snapshots`.js
-
-lazy val `elasticsearch-security` = ProjectUtils
-  .setupCrossModule("elasticsearch-security", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-security"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-security-jvm` = `elasticsearch-security`.jvm
-lazy val `elasticsearch-security-js` = `elasticsearch-security`.js
-
-lazy val `elasticsearch-shutdown` = ProjectUtils
-  .setupCrossModule("elasticsearch-shutdown", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-shutdown"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-shutdown-jvm` = `elasticsearch-shutdown`.jvm
-lazy val `elasticsearch-shutdown-js` = `elasticsearch-shutdown`.js
-
-lazy val `elasticsearch-slm` = ProjectUtils
-  .setupCrossModule("elasticsearch-slm", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-slm"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-slm-jvm` = `elasticsearch-slm`.jvm
-lazy val `elasticsearch-slm-js` = `elasticsearch-slm`.js
-
-lazy val `elasticsearch-snapshot` = ProjectUtils
-  .setupCrossModule("elasticsearch-snapshot", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-snapshot"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-indices` % "test->test;compile->compile")
-
-lazy val `elasticsearch-snapshot-jvm` = `elasticsearch-snapshot`.jvm
-lazy val `elasticsearch-snapshot-js` = `elasticsearch-snapshot`.js
-
-lazy val `elasticsearch-sql` = ProjectUtils
-  .setupCrossModule("elasticsearch-sql", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-sql"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-sql-jvm` = `elasticsearch-sql`.jvm
-lazy val `elasticsearch-sql-js` = `elasticsearch-sql`.js
-
-lazy val `elasticsearch-ssl` = ProjectUtils
-  .setupCrossModule("elasticsearch-ssl", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-ssl"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-ssl-jvm` = `elasticsearch-ssl`.jvm
-lazy val `elasticsearch-ssl-js` = `elasticsearch-ssl`.js
-
-lazy val `elasticsearch-tasks` = ProjectUtils
-  .setupCrossModule("elasticsearch-tasks", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-tasks"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-tasks-jvm` = `elasticsearch-tasks`.jvm
-lazy val `elasticsearch-tasks-js` = `elasticsearch-tasks`.js
-
-lazy val `elasticsearch-text-structure` = ProjectUtils
-  .setupCrossModule("elasticsearch-text-structure", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-text-structure"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-text-structure-jvm` = `elasticsearch-text-structure`.jvm
-lazy val `elasticsearch-text-structure-js` = `elasticsearch-text-structure`.js
-
-lazy val `elasticsearch-transform` = ProjectUtils
-  .setupCrossModule("elasticsearch-transform", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-transform"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-ml` % "test->test;compile->compile")
-
-lazy val `elasticsearch-transform-jvm` = `elasticsearch-transform`.jvm
-lazy val `elasticsearch-transform-js` = `elasticsearch-transform`.js
-
-lazy val `elasticsearch-watcher` = ProjectUtils
-  .setupCrossModule("elasticsearch-watcher", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-watcher"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-
-lazy val `elasticsearch-watcher-jvm` = `elasticsearch-watcher`.jvm
-lazy val `elasticsearch-watcher-js` = `elasticsearch-watcher`.js
-
-lazy val `elasticsearch-xpack` = ProjectUtils
-  .setupCrossModule("elasticsearch-xpack", CrossType.Pure)
-  .settings(
-    moduleName := "zio-elasticsearch-xpack"
-  )
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-ml` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-license` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-ilm` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-slm` % "test->test;compile->compile")
-
-lazy val `elasticsearch-xpack-jvm` = `elasticsearch-xpack`.jvm
-lazy val `elasticsearch-xpack-js` = `elasticsearch-xpack`.js
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
+  .dependsOn(`opensearch-ml` % "test->test;compile->compile")
 
 /*----------*/
 
-lazy val `elasticsearch-orm` = ProjectUtils
-  .setupCrossModule("elasticsearch-orm", CrossType.Pure)
+lazy val `opensearch-orm` = ProjectUtils
+  .setupProject("opensearch-orm")
   .settings(
-    moduleName := "zio-elasticsearch-orm"
+    moduleName := "zio-opensearch-orm"
   )
-  .dependsOn(`elasticsearch-cluster` % "test->test;compile->compile")
-  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
-  .settings(Dependencies.elasticsearchORM)
+  .dependsOn(`opensearch-cluster` % "test->test;compile->compile")
+  .dependsOn(`opensearch-core` % "test->test;compile->compile")
+  .settings(Dependencies.opensearchORM)
 
-lazy val `elasticsearch-orm-jvm` = `elasticsearch-orm`.jvm
-lazy val `elasticsearch-orm-js` = `elasticsearch-orm`.js
-
-//lazy val `elasticsearch-admin` = ProjectUtils
-//  .setupCrossModule("elasticsearch-admin")
+//lazy val `opensearch-admin` = ProjectUtils
+//  .setupProject("opensearch-admin")
 //  .settings(
-//    moduleName := "zio-elasticsearch-admin"
+//    moduleName := "zio-opensearch-admin"
 //  )
-//  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+//  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 //
-//lazy val `elasticsearch-admin-jvm` = `elasticsearch-admin`.jvm.settings(Dependencies.elasticsearchAdmin)
-//lazy val `elasticsearch-admin-js` = `elasticsearch-admin`.js.settings(Dependencies.elasticsearchAdminJS)
+//lazy val `opensearch-admin` = `opensearch-admin`.jvm.settings(Dependencies.opensearchAdmin)
+//lazy val `opensearch-admin-js` = `opensearch-admin`.js.settings(Dependencies.opensearchAdminJS)
 //
-//lazy val `elasticsearch-cat` = ProjectUtils
-//  .setupCrossModule("elasticsearch-cat", CrossType.Pure)
+//lazy val `opensearch-cat` = ProjectUtils
+//  .setupProject("opensearch-cat")
 //  .settings(
-//    moduleName := "zio-elasticsearch-cat"
+//    moduleName := "zio-opensearch-cat"
 //  )
-//  .dependsOn(`elasticsearch-core` % "test->test;compile->compile")
+//  .dependsOn(`opensearch-core` % "test->test;compile->compile")
 //
-//lazy val `elasticsearch-cat-jvm` = `elasticsearch-cat`.jvm
-//lazy val `elasticsearch-cat-js` = `elasticsearch-cat`.js
+//lazy val `opensearch-cat` = `opensearch-cat`.jvm
+//lazy val `opensearch-cat-js` = `opensearch-cat`.js
 
-lazy val `elasticsearch-client-sttp` = ProjectUtils
-  .setupJVMProject("elasticsearch-client-sttp")
+lazy val `opensearch-client-sttp` = ProjectUtils
+  .setupProject("opensearch-client-sttp")
   .settings(
-    moduleName := "zio-elasticsearch-client-sttp"
+    moduleName := "zio-opensearch-client-sttp"
   )
   .settings(Dependencies.clientSTTP)
   .settings(Dependencies.testSupport)
   .dependsOn(
-    `elasticsearch-core-jvm` % "test->test;compile->compile"
+    `opensearch-core` % "test->test;compile->compile"
   )
 
-lazy val `elasticsearch-client-zio-http` = ProjectUtils
-  .setupJVMProject("elasticsearch-zio-http")
+lazy val `opensearch-client-zio-http` = ProjectUtils
+  .setupProject("opensearch-zio-http")
   .settings(
-    moduleName := "zio-elasticsearch-zio-http"
+    moduleName := "zio-opensearch-zio-http"
   )
   .settings(Dependencies.clientZioHTTP)
   .settings(Dependencies.testSupport)
   .dependsOn(
-    `elasticsearch-core-jvm` % "test->test;compile->compile"
+    `opensearch-core` % "test->test;compile->compile"
   )
 
-lazy val `elasticsearch-tests` = ProjectUtils
-  .setupJVMProject("elasticsearch-tests")
+lazy val `opensearch-tests` = ProjectUtils
+  .setupProject("opensearch-tests")
   .settings(
-    moduleName := "zio-elasticsearch-tests"
+    moduleName := "zio-opensearch-tests"
   )
   .settings(Dependencies.testSupport)
   .dependsOn(
-    `elasticsearch-core-jvm` % "test->test;compile->compile"
+    `opensearch-core` % "test->test;compile->compile"
   )
   .dependsOn(
-    `elasticsearch-async-search-jvm`,
-    `elasticsearch-autoscaling-jvm`,
-    `elasticsearch-cluster-jvm`,
-    `elasticsearch-ccr-jvm`,
-    `elasticsearch-dangling-indices-jvm`,
-    `elasticsearch-enrich-jvm`,
-    `elasticsearch-eql-jvm`,
-    `elasticsearch-features-jvm`,
-    `elasticsearch-fleet-jvm`,
-    `elasticsearch-graph-jvm`,
-    `elasticsearch-indices-jvm`,
-    `elasticsearch-ilm-jvm`,
-    `elasticsearch-ingest-jvm`,
-    `elasticsearch-license-jvm`,
-    `elasticsearch-logstash-jvm`,
-    `elasticsearch-migration-jvm`,
-    `elasticsearch-ml-jvm`,
-    `elasticsearch-monitoring-jvm`,
-    `elasticsearch-nodes-jvm`,
-    `elasticsearch-rollup-jvm`,
-    `elasticsearch-searchable-snapshots-jvm`,
-    `elasticsearch-security-jvm`,
-    `elasticsearch-shutdown-jvm`,
-    `elasticsearch-slm-jvm`,
-    `elasticsearch-snapshot-jvm`,
-    `elasticsearch-sql-jvm`,
-    `elasticsearch-ssl-jvm`,
-    `elasticsearch-tasks-jvm`,
-    `elasticsearch-text-structure-jvm`,
-    `elasticsearch-transform-jvm`,
-    `elasticsearch-watcher-jvm`,
-    `elasticsearch-xpack-jvm`,
-    `elasticsearch-orm-jvm`,
-    `elasticsearch-client-sttp`,
-    `elasticsearch-client-zio-http` //,
-  ).settings(disableDocs).settings(disablePublishing)
+    `opensearch-cluster`,
+    `opensearch-dangling-indices`,
+    `opensearch-enrich`,
+    `opensearch-indices`,
+    `opensearch-ingest`,
+    `opensearch-migration`,
+    `opensearch-ml`,
+    `opensearch-monitoring`,
+    `opensearch-nodes`,
+    `opensearch-rollup`,
+    `opensearch-searchable-snapshots`,
+    `opensearch-security`,
+    `opensearch-shutdown`,
+    `opensearch-slm`,
+    `opensearch-snapshot`,
+    `opensearch-sql`,
+    `opensearch-ssl`,
+    `opensearch-tasks`,
+    `opensearch-text-structure`,
+    `opensearch-transform`,
+    `opensearch-orm`,
+    `opensearch-client-sttp`,
+    `opensearch-client-zio-http` //,
+  )
+  .settings(disableDocs)
+  .settings(disablePublishing)
 
-
-//lazy val `elasticsearch-orm` = ProjectUtils
-//  .setupCrossModule("elasticsearch-orm", CrossType.Full)
+//lazy val `opensearch-orm` = ProjectUtils
+//  .setupProject("opensearch-orm", CrossType.Full)
 //  .settings(
-//    moduleName := "zio-elasticsearch-orm"
+//    moduleName := "zio-opensearch-orm"
 //  )
-//  .dependsOn(`zio-schema-elasticsearch`, `elasticsearch-admin` % "test->test;compile->compile")
+//  .dependsOn(`zio-schema-opensearch`, `opensearch-admin` % "test->test;compile->compile")
 //
-//lazy val `elasticsearch-orm-jvm` = `elasticsearch-orm`.jvm
-//lazy val `elasticsearch-orm-js` = `elasticsearch-orm`.js
+//lazy val `opensearch-orm` = `opensearch-orm`.jvm
+//lazy val `opensearch-orm-js` = `opensearch-orm`.js
 
 /*
-lazy val `elasticsearch-client-http4s` = ProjectUtils
-  .setupJVMProject("elasticsearch-client-http4s")
+lazy val `opensearch-client-http4s` = ProjectUtils
+  .setupProject("opensearch-client-http4s")
   .settings(
-    moduleName := "zio-elasticsearch-client-http4s"
+    moduleName := "zio-opensearch-client-http4s"
   )
   .settings(Dependencies.clientHttp4s)
   .dependsOn(
-    `elasticsearch-orm-jvm` % "test->test;compile->compile",
-    `elasticsearch-core-jvm` % "test->test;compile->compile",
-    `elasticsearch-admin-jvm` % "test->test;compile->compile",
-    `elasticsearch-cat-jvm` % "test->test;compile->compile"
+    `opensearch-orm` % "test->test;compile->compile",
+    `opensearch-core` % "test->test;compile->compile",
+    `opensearch-admin` % "test->test;compile->compile",
+    `opensearch-cat` % "test->test;compile->compile"
   )
  */
 // Releasing

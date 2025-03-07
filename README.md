@@ -1,53 +1,53 @@
-# zio-elasticsearch
-ElasticSearch client for Scala based on ZIO and FP.
-Only Elasticsearch 7.x is supported.
+# zio-opensearch
+OpenSearch client for Scala based on ZIO and FP.
+Only OpenSearch 7.x is supported.
 
 The project targets are:
 - simply API for JVM and JS (targeting Scala 2.12/2.13 for now)
 - completely functional approach on the library based on ZIO
-- full typesafe Query, Aggregation, Request and Response of Elasticsearch
+- full typesafe Query, Aggregation, Request and Response of OpenSearch
 - http layer based on [sttp](https://github.com/softwaremill/sttp) (in future zio-http when it will be released)
 - using [zio-json]() for json management 
-- full coverage of Elasticsearch call/responses (generated from API)
+- full coverage of OpenSearch call/responses (generated from API)
 
 All the code is based on Manager (ZIO Services) that can be composed to provide required functionalities to your project.
 Splitting the API in different reduces the size of the classes for the overall project.
 
 The actual modules are:
 
- - zio-elasticsearch-core: it provides all the core functionalities: document management and searching (query, aggregation, ...)
- - zio-elasticsearch-async-search: it provides support for async search API
- - zio-elasticsearch-autoscaling: it provides support for autoscaling API
- - zio-elasticsearch-cluster: it provides support for cluster API
- - zio-elasticsearch-ccr: it provides support for Cross Cluster Replication API
- - zio-elasticsearch-dangling-indices: it provides support for Dangling Indices API
- - zio-elasticsearch-enrich: it provides support for Enrich API
- - zio-elasticsearch-eql: it provides support for EQL API
- - zio-elasticsearch-features: it provides support for Features API
- - zio-elasticsearch-fleet: it provides support for Fleet API
- - zio-elasticsearch-graph: it provides support for Graph API
- - zio-elasticsearch-indices: it provides support for Index Management API
- - zio-elasticsearch-ilm: it provides support for Index Management API
- - zio-elasticsearch-ingest: it provides support for Ingest API with strong typed Process support
- - zio-elasticsearch-license: it provides support for License API
- - zio-elasticsearch-logstash: it provides support for Logstash API
- - zio-elasticsearch-migration: it provides support for Migration API
- - zio-elasticsearch-ml: it provides support for Machine Learning API
- - zio-elasticsearch-monitoring: it provides support for Monitoring API
- - zio-elasticsearch-nodes: it provides support for Nodes API
- - zio-elasticsearch-rollup: it provides support for Roll Up API
- - zio-elasticsearch-searchable-snapshots: it provides support for Searchable Snapshot API
- - zio-elasticsearch-security: it provides support for Security API
- - zio-elasticsearch-shutdown: it provides support for Shutdown API
- - zio-elasticsearch-slm: it provides support for SLM API
- - zio-elasticsearch-snapshot: it provides support for Snapshot API
- - zio-elasticsearch-sql: it provides support for SQL API
- - zio-elasticsearch-ssl: it provides support for SSL API
- - zio-elasticsearch-tasks: it provides support for Tasks API
- - zio-elasticsearch-text-structure: it provides support for Text Structure API
- - zio-elasticsearch-transform: it provides support for Transform API
- - zio-elasticsearch-watcher: it provides support for Watcher API
- - zio-elasticsearch-xpack: it provides support for XPACK API
+ - zio-opensearch-core: it provides all the core functionalities: document management and searching (query, aggregation, ...)
+ - zio-opensearch-async-search: it provides support for async search API
+ - zio-opensearch-autoscaling: it provides support for autoscaling API
+ - zio-opensearch-cluster: it provides support for cluster API
+ - zio-opensearch-ccr: it provides support for Cross Cluster Replication API
+ - zio-opensearch-dangling-indices: it provides support for Dangling Indices API
+ - zio-opensearch-enrich: it provides support for Enrich API
+ - zio-opensearch-eql: it provides support for EQL API
+ - zio-opensearch-features: it provides support for Features API
+ - zio-opensearch-fleet: it provides support for Fleet API
+ - zio-opensearch-graph: it provides support for Graph API
+ - zio-opensearch-indices: it provides support for Index Management API
+ - zio-opensearch-ilm: it provides support for Index Management API
+ - zio-opensearch-ingest: it provides support for Ingest API with strong typed Process support
+ - zio-opensearch-license: it provides support for License API
+ - zio-opensearch-logstash: it provides support for Logstash API
+ - zio-opensearch-migration: it provides support for Migration API
+ - zio-opensearch-ml: it provides support for Machine Learning API
+ - zio-opensearch-monitoring: it provides support for Monitoring API
+ - zio-opensearch-nodes: it provides support for Nodes API
+ - zio-opensearch-rollup: it provides support for Roll Up API
+ - zio-opensearch-searchable-snapshots: it provides support for Searchable Snapshot API
+ - zio-opensearch-security: it provides support for Security API
+ - zio-opensearch-shutdown: it provides support for Shutdown API
+ - zio-opensearch-slm: it provides support for SLM API
+ - zio-opensearch-snapshot: it provides support for Snapshot API
+ - zio-opensearch-sql: it provides support for SQL API
+ - zio-opensearch-ssl: it provides support for SSL API
+ - zio-opensearch-tasks: it provides support for Tasks API
+ - zio-opensearch-text-structure: it provides support for Text Structure API
+ - zio-opensearch-transform: it provides support for Transform API
+ - zio-opensearch-watcher: it provides support for Watcher API
+ - zio-opensearch-xpack: it provides support for XPACK API
 
 And their dependencies are the following ones:
 ![Module dependencies](dependencies.png)
@@ -60,15 +60,15 @@ The follow overcommented example is taken from test directory:
 
 
 ```
-package zio.elasticsearch.client
+package zio.opensearch.client
 
-import zio.elasticsearch.orm.QueryBuilder
-import zio.elasticsearch.queries.TermQuery
-import zio.elasticsearch.requests.UpdateByQueryRequest
-import zio.elasticsearch.{ ESSystemUser, SpecHelper, AuthContext }
+import zio.opensearch.orm.QueryBuilder
+import zio.opensearch.queries.TermQuery
+import zio.opensearch.requests.UpdateByQueryRequest
+import zio.opensearch.{ ESSystemUser, SpecHelper, AuthContext }
 import zio.json._
 import io.circe._
-import org.codelibs.elasticsearch.runner.ElasticsearchClusterRunner
+import org.codelibs.opensearch.runner.OpenSearchClusterRunner
 import org.scalatest._
 import zio.blocking.Blocking
 import org.scalatest.WordSpec
@@ -77,13 +77,13 @@ import zio.console.Console
 import zio.random.Random
 import zio.{ DefaultRuntime, system }
 
-class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll with SpecHelper {
+class OpenSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll with SpecHelper {
 
   // we init a cluster for test
-  private val runner = new ElasticsearchClusterRunner()
+  private val runner = new OpenSearchClusterRunner()
 
-  // we init a n ElasticSearch Client
-  implicit val elasticsearch = ZioClient("localhost", 9201)
+  // we init a n OpenSearch Client
+  implicit val opensearch = ZioClient("localhost", 9201)
 
   // we need a ZIO Enrvironment to "runUnsafe" out code
   lazy val environment: zio.Runtime[Clock with Console with system.System with Random with Blocking] =
@@ -91,7 +91,7 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
 
   // a context propagate user and other info for every call without need to pass the arguments to all functions
   implicit val context =
-    new AuthContext(ESSystemUser, elasticsearch = elasticsearch)
+    new AuthContext(ESSystemUser, opensearch = opensearch)
 
   // we create a case class that contains our data
   // JsonCodec is a macro annotation that create encoder and decoder for circe
@@ -101,7 +101,7 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
 
   // we init the data 
   override def beforeAll() = {
-    runner.build(ElasticsearchClusterRunner.newConfigs().baseHttpPort(9200).numOfNode(1))
+    runner.build(OpenSearchClusterRunner.newConfigs().baseHttpPort(9200).numOfNode(1))
     runner.ensureYellow()
 
     // we prepare he store statement with an ending refresh
@@ -113,7 +113,7 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
       _ <- register("source", "Scala Puzzlers", 5)
       _ <- register("source", "Effective Akka", 6)
       _ <- register("source", "Akka Concurrency", 7)
-      _ <- elasticsearch.refresh("source")
+      _ <- opensearch.refresh("source")
 
     } yield ()
 
@@ -123,18 +123,18 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
 
   // called on test completion
   override def afterAll() = {
-    elasticsearch.close()
+    opensearch.close()
     runner.close()
     runner.clean()
   }
 
   // helper function to flush ES to allow to search data
   def flush(indexName: String): Unit =
-    environment.unsafeRun(elasticsearch.refresh(indexName))
+    environment.unsafeRun(opensearch.refresh(indexName))
 
   // helper function to create an index request
   private def register(indexName: String, title: String, pages: Int) =
-    elasticsearch.indexDocument(
+    opensearch.indexDocument(
       indexName,
       body = JsonObject.fromMap(
         Map("title" -> Json.fromString(title), "pages" -> Json.fromInt(pages), "active" -> Json.fromBoolean(false))
@@ -145,7 +145,7 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
 
     "count elements" in {
       // we call the countAll elements inside a index
-      val count = environment.unsafeRun(elasticsearch.countAll("source"))
+      val count = environment.unsafeRun(opensearch.countAll("source"))
       count should be(7)
     }
 
@@ -153,7 +153,7 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
       
       // we call the updateByQuery
       val multipleResultE = environment.unsafeRun(
-        elasticsearch.updateByQuery(
+        opensearch.updateByQuery(
           UpdateByQueryRequest.fromPartialDocument("source", JsonObject("active" -> Json.fromBoolean(true)))
         )
       )
@@ -163,7 +163,7 @@ class ElasticSearchSpec extends WordSpec with Matchers with BeforeAndAfterAll wi
       
       // we execute a query on updated data
       val searchResultE = environment.unsafeRun(
-        elasticsearch.search(QueryBuilder(indices = List("source"), filters = List(TermQuery("active", true))))
+        opensearch.search(QueryBuilder(indices = List("source"), filters = List(TermQuery("active", true))))
       )
 
       searchResultE.total.value should be(7)

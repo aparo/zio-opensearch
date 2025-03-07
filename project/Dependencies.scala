@@ -1,6 +1,5 @@
 import sbt._
 import sbt.Keys._
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 
 object Dependencies {
   import PlatformDependencies._
@@ -10,30 +9,31 @@ object Dependencies {
       ScalaTest.test.value,
       "dev.zio" %% "zio-test" % Versions.zio,
       "dev.zio" %% "zio-test-sbt" % Versions.zio,
-      "com.dimafeng" %% "testcontainers-scala-elasticsearch" % Versions.testContainerScala,
+      "org.opensearch" % "opensearch-testcontainers" % Versions.testContainerOpenSearch,
+      "com.dimafeng" %% "testcontainers-scala-opensearch" % Versions.testContainerScala,
       "ch.qos.logback" % "logback-core" % "1.4.6"
     ),
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
   )
 
-  lazy val zioSchemaElasticsearch = Seq(
+  lazy val zioSchemaOpenSearch = Seq(
     libraryDependencies ++= DependencyHelpers.compile(
-      "dev.zio" %%% "zio-schema-json" % "0.4.11"
+      "dev.zio" %% "zio-schema-json" % "1.6.4"
     )
   )
 
-  lazy val elasticsearchORM = Seq(
+  lazy val opensearchORM = Seq(
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % Versions.scala % Provided
     )
   )
 
-  lazy val elasticsearchAdmin = Def.settings {
+  lazy val opensearchAdmin = Def.settings {
     libraryDependencies ++= DependencyHelpers.compile(
       )
   }
 
-  lazy val elasticsearchAdminJS = Def.settings {
+  lazy val opensearchAdminJS = Def.settings {
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % Versions.scala % Provided
     )
@@ -44,11 +44,9 @@ object Dependencies {
       ZIO.json.value,
       ZIO.core.value,
       ZIO.streams.value,
-//      "org.scala-lang" % "scala-reflect" % Versions.scala %Provided,
-      "org.gnieh" %%% "diffson-core" % "4.4.0",
-//      "com.softwaremill.magnolia1_2" %%% "magnolia" % "1.1.2",
-      "org.scala-lang.modules" %%% "scala-collection-compat" % "2.10.0",
-      "io.github.cquiroz" %%% "scala-java-time" % "2.5.0"
+      "org.gnieh" %% "diffson-core" % "4.6.0",
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.13.0",
+      "io.github.cquiroz" %% "scala-java-time" % "2.6.0"
     ) ++
       DependencyHelpers.test(
         ScalaTest.test.value,
@@ -80,14 +78,14 @@ object Dependencies {
 
   lazy val clientSTTP = Def.settings {
     libraryDependencies ++= Seq(
-      "com.softwaremill.sttp.client3" %% "zio" % "3.8.15",
-      "com.softwaremill.sttp.client3" %% "prometheus-backend" % "3.8.15"
+      "com.softwaremill.sttp.client3" %% "zio" % "3.10.3",
+      "com.softwaremill.sttp.client3" %% "prometheus-backend" % "3.10.3"
     )
   }
 
   lazy val clientZioHTTP = Def.settings {
     libraryDependencies ++= Seq(
-      "dev.zio" %% "zio-http" % "3.0.0-RC1"
+      "dev.zio" %% "zio-http" % "3.0.1"
     )
   }
 
@@ -98,7 +96,7 @@ object Dependencies {
       HTTP4S.blazeClient
     ) ++ DependencyHelpers.test(
       ScalaTest.test.value,
-      "com.dimafeng" %% "testcontainers-scala-elasticsearch" % Versions.testContainerScala
+      "org.opensearch" % "opensearch-testcontainers" % Versions.testContainerOpenSearch
     )
   }
 

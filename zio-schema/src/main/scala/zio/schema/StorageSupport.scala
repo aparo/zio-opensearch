@@ -20,7 +20,7 @@ import zio.schema.annotations._
 
 object StorageSupport {
 
-  private var storages: List[StorageAnnotation] = List(ElasticSearchStorage(), MongoDBStorage())
+  private var storages: List[StorageAnnotation] = List(OpenSearchStorage(), MongoDBStorage())
 
   def register(storageAnnotation: StorageAnnotation): Unit =
     if (!storages.contains(storageAnnotation)) {

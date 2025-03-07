@@ -61,8 +61,8 @@ object NameSpaceUtils {
 
   def getModule(name: String): String = {
     var tokens = name.toLowerCase().split("\\.").toList
-    if (tokens.contains("elasticsearch")) {
-      return tokens(tokens.indexOf("elasticsearch") + 1)
+    if (tokens.contains("opensearch")) {
+      return tokens(tokens.indexOf("opensearch") + 1)
     }
 
     if (tokens.contains("models")) {

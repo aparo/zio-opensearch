@@ -48,9 +48,9 @@ private class ClassAnnotationManager(
   // map a fullname to special types
   private val speciaFieldType =
     Map(
-      "elasticsearch.geo.GeoHash" -> "geo_point",
-      "elasticsearch.geo.GeoPoint" -> "geo_point",
-      "elasticsearch.geo.GeoPointLatLon" -> "geo_point"
+      "opensearch.geo.GeoHash" -> "geo_point",
+      "opensearch.geo.GeoPoint" -> "geo_point",
+      "opensearch.geo.GeoPointLatLon" -> "geo_point"
     )
 
   private def extractType: String = speciaFieldType.getOrElse(this.fullname, "object")

@@ -34,8 +34,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |{
                               |  "type": "object",
                               |  "name": "analytic",
-                              |  "module": "elasticsearch",
-                              |  "class_name": "zio.elasticsearch.models.Analytic",
+                              |  "module": "opensearch",
+                              |  "class_name": "zio.opensearch.models.Analytic",
                               |  "is_root": true,
                               |  "properties": [
                               |    {
@@ -50,8 +50,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |    {
                               |      "type": "object",
                               |      "name": "queryContext",
-                              |      "module": "elasticsearch",
-                              |      "class_name": "zio.elasticsearch.models.QueryViewQuery",
+                              |      "module": "opensearch",
+                              |      "class_name": "zio.opensearch.models.QueryViewQuery",
                               |      "is_root": true,
                               |      "properties": [
                               |        {
@@ -145,7 +145,7 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |          "name": "sort"
                               |        }
                               |      ],
-                              |      "id": "zio.elasticsearch.models.QueryViewQuery",
+                              |      "id": "zio.opensearch.models.QueryViewQuery",
                               |      "index": {
                               |        "index": false
                               |      }
@@ -160,8 +160,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |    {
                               |      "type": "object",
                               |      "name": "aggregation",
-                              |      "module": "elasticsearch",
-                              |      "class_name": "zio.elasticsearch.models.QueryViewAggregation",
+                              |      "module": "opensearch",
+                              |      "class_name": "zio.opensearch.models.QueryViewAggregation",
                               |      "is_root": true,
                               |      "properties": [
                               |        {
@@ -191,8 +191,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |        {
                               |          "type": "object",
                               |          "name": "chartOptions",
-                              |          "module": "elasticsearch",
-                              |          "class_name": "zio.elasticsearch.models.ChartOptions",
+                              |          "module": "opensearch",
+                              |          "class_name": "zio.opensearch.models.ChartOptions",
                               |          "is_root": true,
                               |          "properties": [
                               |            {
@@ -251,7 +251,7 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |              "name": "title"
                               |            }
                               |          ],
-                              |          "id": "zio.elasticsearch.models.ChartOptions"
+                              |          "id": "zio.opensearch.models.ChartOptions"
                               |        },
                               |        {
                               |          "type": "object",
@@ -266,7 +266,7 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |      ],
                               |      "required": false,
                               |      "multiple": false,
-                              |      "id": "zio.elasticsearch.models.QueryViewAggregation",
+                              |      "id": "zio.opensearch.models.QueryViewAggregation",
                               |      "index": {
                               |        "index": false
                               |      }
@@ -276,8 +276,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |      "items": {
                               |        "type": "object",
                               |        "name": "filters",
-                              |        "module": "elasticsearch",
-                              |        "class_name": "zio.elasticsearch.models.QueryViewFilter",
+                              |        "module": "opensearch",
+                              |        "class_name": "zio.opensearch.models.QueryViewFilter",
                               |        "is_root": true,
                               |        "properties": [
                               |          {
@@ -306,7 +306,7 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |            "name": "active"
                               |          }
                               |        ],
-                              |        "id": "zio.elasticsearch.models.QueryViewFilter"
+                              |        "id": "zio.opensearch.models.QueryViewFilter"
                               |      },
                               |      "multiple": true,
                               |      "type": "array",
@@ -340,8 +340,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |        {
                               |          "type": "object",
                               |          "name": "no_render",
-                              |          "module": "elasticsearch",
-                              |          "class_name": "zio.elasticsearch.models.NoRender",
+                              |          "module": "opensearch",
+                              |          "class_name": "zio.opensearch.models.NoRender",
                               |          "is_root": true,
                               |          "properties": [
                               |            {
@@ -350,13 +350,13 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |              "name": "msg"
                               |            }
                               |          ],
-                              |          "id": "zio.elasticsearch.models.NoRender"
+                              |          "id": "zio.opensearch.models.NoRender"
                               |        },
                               |        {
                               |          "type": "object",
                               |          "name": "table_render_method",
-                              |          "module": "elasticsearch",
-                              |          "class_name": "zio.elasticsearch.models.TableRenderMethod",
+                              |          "module": "opensearch",
+                              |          "class_name": "zio.opensearch.models.TableRenderMethod",
                               |          "is_root": true,
                               |          "properties": [
                               |            {
@@ -364,8 +364,8 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |              "items": {
                               |                "type": "object",
                               |                "name": "columns",
-                              |                "module": "elasticsearch",
-                              |                "class_name": "zio.elasticsearch.models.ColumnRender",
+                              |                "module": "opensearch",
+                              |                "class_name": "zio.opensearch.models.ColumnRender",
                               |                "is_root": true,
                               |                "properties": [
                               |                  {
@@ -377,7 +377,7 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |                    "name": "path"
                               |                  }
                               |                ],
-                              |                "id": "zio.elasticsearch.models.ColumnRender"
+                              |                "id": "zio.opensearch.models.ColumnRender"
                               |              },
                               |              "multiple": true,
                               |              "type": "array",
@@ -385,13 +385,13 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |              "name": "columns"
                               |            }
                               |          ],
-                              |          "id": "zio.elasticsearch.models.TableRenderMethod"
+                              |          "id": "zio.opensearch.models.TableRenderMethod"
                               |        },
                               |        {
                               |          "type": "object",
                               |          "name": "graph_render_method",
-                              |          "module": "elasticsearch",
-                              |          "class_name": "zio.elasticsearch.models.GraphRenderMethod",
+                              |          "module": "opensearch",
+                              |          "class_name": "zio.opensearch.models.GraphRenderMethod",
                               |          "is_root": true,
                               |          "properties": [
                               |            {
@@ -400,7 +400,7 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |              "name": "span"
                               |            }
                               |          ],
-                              |          "id": "zio.elasticsearch.models.GraphRenderMethod"
+                              |          "id": "zio.opensearch.models.GraphRenderMethod"
                               |        }
                               |      ],
                               |      "index": {
@@ -435,9 +435,9 @@ class ParsingSpec extends AnyFlatSpec with Matchers {
                               |    "table": "analytics"
                               |  },
                               |  "storages": [
-                              |    "elasticsearch"
+                              |    "opensearch"
                               |  ],
-                              |  "id": "zio.elasticsearch.models.Analytic"
+                              |  "id": "zio.opensearch.models.Analytic"
                               |}
                               |""".stripMargin).right.get
 

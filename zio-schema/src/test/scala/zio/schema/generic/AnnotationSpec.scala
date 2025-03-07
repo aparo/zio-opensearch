@@ -67,7 +67,7 @@ import zio.json._
 //     @Modified modified: OffsetDateTime
 //   )
 
-//   @ElasticSearchStorage
+//   @OpenSearchStorage
 //   case class IndexFieldFoo(
 //     @Keyword @Text @NLP @Stem("it") @Suggest unique: String,
 //     @HeatMap @Created created: OffsetDateTime
@@ -305,7 +305,7 @@ import zio.json._
 //                      |    }
 //                      |  ],
 //                      |  "storages" : [
-//                      |    "elasticsearch"
+//                      |    "opensearch"
 //                      |  ],
 //                      |  "id" : "zio.schema.generic.AnnotationSpec.IndexFieldFoo"
 //                      |}
