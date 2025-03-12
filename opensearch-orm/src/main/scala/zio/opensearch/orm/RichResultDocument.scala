@@ -46,7 +46,6 @@ object RichResultDocument {
       bulk: Boolean = false,
       forceCreate: Boolean = false,
       index: Option[String] = None,
-      docType: Option[String] = None,
       refresh: Boolean = false
     )(implicit ormManager: OrmManager, authContext: AuthContext): ZIO[Any, FrameworkException, Json.Obj] = {
       val client = ormManager.openSearchService

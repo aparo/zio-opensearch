@@ -1,9 +1,9 @@
 # zio-opensearch
 OpenSearch client for Scala based on ZIO and FP.
-Only OpenSearch 7.x is supported.
+Only OpenSearch 2.9.x or above are supported.
 
 The project targets are:
-- simply API for JVM and JS (targeting Scala 2.12/2.13 for now)
+- simply API for JVM
 - completely functional approach on the library based on ZIO
 - full typesafe Query, Aggregation, Request and Response of OpenSearch
 - http layer based on [sttp](https://github.com/softwaremill/sttp) (in future zio-http when it will be released)
@@ -16,18 +16,10 @@ Splitting the API in different reduces the size of the classes for the overall p
 The actual modules are:
 
  - zio-opensearch-core: it provides all the core functionalities: document management and searching (query, aggregation, ...)
- - zio-opensearch-async-search: it provides support for async search API
- - zio-opensearch-autoscaling: it provides support for autoscaling API
  - zio-opensearch-cluster: it provides support for cluster API
- - zio-opensearch-ccr: it provides support for Cross Cluster Replication API
  - zio-opensearch-dangling-indices: it provides support for Dangling Indices API
  - zio-opensearch-enrich: it provides support for Enrich API
- - zio-opensearch-eql: it provides support for EQL API
- - zio-opensearch-features: it provides support for Features API
- - zio-opensearch-fleet: it provides support for Fleet API
- - zio-opensearch-graph: it provides support for Graph API
  - zio-opensearch-indices: it provides support for Index Management API
- - zio-opensearch-ilm: it provides support for Index Management API
  - zio-opensearch-ingest: it provides support for Ingest API with strong typed Process support
  - zio-opensearch-license: it provides support for License API
  - zio-opensearch-logstash: it provides support for Logstash API
@@ -46,8 +38,6 @@ The actual modules are:
  - zio-opensearch-tasks: it provides support for Tasks API
  - zio-opensearch-text-structure: it provides support for Text Structure API
  - zio-opensearch-transform: it provides support for Transform API
- - zio-opensearch-watcher: it provides support for Watcher API
- - zio-opensearch-xpack: it provides support for XPACK API
 
 And their dependencies are the following ones:
 ![Module dependencies](dependencies.png)

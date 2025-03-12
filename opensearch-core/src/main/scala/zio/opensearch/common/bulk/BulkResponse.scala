@@ -23,7 +23,6 @@ import zio.json.ast._
 
 sealed trait BulkItemResponse {
   def index: String
-  def docType: String
   def id: String
   def version: Option[Long]
   def result: Option[String]
@@ -55,7 +54,6 @@ object BulkItemResponse {
 final case class IndexBulkItemResponse(
   @jsonField("_index") index: String,
   @jsonField("_id") id: String,
-  @jsonField("_type") docType: String = "_doc",
   @jsonField("_version") version: Option[Long] = None,
   result: Option[String] = None,
   status: Int = 200,
@@ -77,7 +75,6 @@ object IndexBulkItemResponse {
 final case class CreateBulkItemResponse(
   @jsonField("_index") index: String,
   @jsonField("_id") id: String,
-  @jsonField("_type") docType: String = "_doc",
   @jsonField("_version") version: Option[Long] = None,
   result: Option[String] = None,
   status: Int = 200,
@@ -99,7 +96,6 @@ object CreateBulkItemResponse {
 final case class UpdateBulkItemResponse(
   @jsonField("_index") index: String,
   @jsonField("_id") id: String,
-  @jsonField("_type") docType: String = "_doc",
   @jsonField("_version") version: Option[Long] = None,
   result: Option[String] = None,
   status: Int = 200,
@@ -121,7 +117,6 @@ object UpdateBulkItemResponse {
 final case class DeleteBulkItemResponse(
   @jsonField("_index") index: String,
   @jsonField("_id") id: String,
-  @jsonField("_type") docType: String = "_doc",
   @jsonField("_version") version: Option[Long] = None,
   result: Option[String] = None,
   status: Int = 200,

@@ -40,7 +40,6 @@ object Explanation {
 final case class ResultDocument(
   @jsonField("_id") id: String,
   @jsonField("_index") index: String,
-  @jsonField("_type") docType: String = "_doc",
   version: Option[Long] = None,
   score: Option[Double] = None,
   @jsonField("_source") source: Option[Json.Obj] = None,
@@ -79,7 +78,6 @@ object ResultDocument {
     ResultDocument(
       id = response.id,
       index = response.index,
-      docType = response.docType,
       version = Option(response.version),
       source = response.source,
       fields = Some(response.fields)
@@ -128,8 +126,6 @@ object ResultDocument {
     field match {
       case "_id" =>
         Chunk(record.id.asInstanceOf[K])
-      case "_type" =>
-        Chunk(record.docType.asInstanceOf[K])
       case "_index" =>
         Chunk(record.index.asInstanceOf[K])
       case f =>

@@ -17,11 +17,11 @@
 package zio.opensearch.mappings
 
 import zio.Chunk
-import zio.opensearch.common.mappings.FieldType
-import zio.opensearch.common.analysis.Analyzer
 import zio.exception.FrameworkException
 import zio.json._
 import zio.json.ast._
+import zio.opensearch.common.analysis.Analyzer
+import zio.opensearch.common.mappings.FieldType
 
 import java.time.OffsetDateTime
 
@@ -74,7 +74,7 @@ sealed trait Mapping { self =>
       case m: NestedMapping => m.properties
       case m: ObjectMapping => m.properties
       case m: KeywordMapping => m.fields
-      case m: FlattenedMapping =>  m.fields
+      case m: FlatObjectMapping =>  m.fields
       case m: TextMapping => m.fields
       case m: TokenCountMapping => m.fields
       //toSkip
@@ -125,7 +125,7 @@ sealed trait Mapping { self =>
       case m: RootDocumentMapping => m.copy(properties = m.properties ++ sFields)
       case m: TextMapping => m.copy(fields = m.fields ++ sFields)
       case m: KeywordMapping => m.copy(fields = m.fields ++ sFields)
-      case m: FlattenedMapping => m.copy(fields = m.fields ++ sFields)
+      case m: FlatObjectMapping => m.copy(fields = m.fields ++ sFields)
       //toSkip
       case m => m
     }
@@ -160,7 +160,7 @@ sealed trait Mapping { self =>
       case m: ObjectMapping => m.copy(enabled = index)
       case m: TextMapping => m.copy(index = index)
       case m: KeywordMapping => m.copy(index = index)
-      case m: FlattenedMapping => m.copy(index = index)
+      case m: FlatObjectMapping => m.copy(index = index)
       //toSkip
       case m => m
     }
@@ -213,6 +213,7 @@ object Mapping {
     typeName match {
       case FieldType.none => ???
       case FieldType.geo_point => c.as[GeoPointMapping]
+      case FieldType.knn_vector => c.as[KnnVectorMapping]
       case FieldType.geo_shape => c.as[GeoShapeMapping]
       case FieldType.ip => c.as[IpMapping]
       case FieldType.binary => c.as[BinaryMapping]
@@ -226,6 +227,7 @@ object Mapping {
       case FieldType.nested => c.as[NestedMapping]
       case FieldType.`object` => c.as[ObjectMapping]
       case FieldType.murmur3 => c.as[Murmur3Mapping]
+      case FieldType.wildcard => c.as[WildcardMapping]
       case FieldType.token_count =>  c.as[TokenCountMapping]
       case FieldType.percolator => c.as[PercolatorMapping]
       case FieldType.integer => c.as[IntegerMapping]
@@ -246,12 +248,11 @@ object Mapping {
       case FieldType.join => c.as[JoinMapping]
       case FieldType.rank_feature => c.as[RankFeatureMapping]
       case FieldType.rank_features => c.as[RankFeaturesMapping]
-      case FieldType.flattened => c.as[FlattenedMapping]
+      case FieldType.flat_object => c.as[FlatObjectMapping]
       case FieldType.shape => c.as[ShapeMapping]
       case FieldType.histogram => c.as[HistogramMapping]
       case FieldType.constant_keyword => c.as[ConstantKeywordMapping]
       case FieldType.aggregate_metric_double => c.as[AggregateMetricDoubleMapping]
-      case FieldType.dense_vector => c.as[DenseVectorMapping]
       case FieldType.match_only_text => c.as[MatchOnlyTextMapping]
 // Internals
       case FieldType._boost => c.as[BoostMapping]
@@ -317,25 +318,6 @@ implicit val jsonDecoder: JsonDecoder[AliasMapping] = DeriveJsonDecoder.gen[Alia
 implicit val jsonEncoder: JsonEncoder[AliasMapping] = DeriveJsonEncoder.gen[AliasMapping]
 }
 
-@jsonHint("dense_vector")
-final case class DenseVectorMapping(path: String) extends Mapping {
-  def `type`: FieldType=FieldType.dense_vector
-  override def docValues: Option[Boolean] = None
-  override def store: Boolean = false
-  override def index: Boolean = false
-  override def boost: Float = 1.0f
-  override def indexOptions: Option[IndexOptions] = None
-  override def similarity: Option[Similarity] = None
-  override def fields: Map[String, Mapping] = Map.empty
-  override def copyTo: Chunk[String] = Chunk.empty
-}
-
-
-object DenseVectorMapping {
-  implicit val jsonDecoder: JsonDecoder[DenseVectorMapping] = DeriveJsonDecoder.gen[DenseVectorMapping]
-  implicit val jsonEncoder: JsonEncoder[DenseVectorMapping] = DeriveJsonEncoder.gen[DenseVectorMapping]
-}
-
 @jsonHint("histogram")
 final case class HistogramMapping(path: String) extends Mapping {
   def `type`: FieldType=FieldType.histogram
@@ -375,7 +357,7 @@ object AggregateMetricDoubleMapping {
 }
 
 @jsonHint("rank_feature")
-final case class RankFeatureMapping() extends Mapping {
+final case class RankFeatureMapping(@jsonField("positive_score_impact") positiveScoreImpact: Option[Boolean] = None) extends Mapping {
   def `type`: FieldType=FieldType.rank_features
   override def docValues: Option[Boolean] = None
   override def store: Boolean = false
@@ -394,7 +376,7 @@ object RankFeatureMapping {
 }
 
 @jsonHint("rank_features")
-final case class RankFeaturesMapping() extends Mapping {
+final case class RankFeaturesMapping(@jsonField("positive_score_impact") positiveScoreImpact: Option[Boolean] = None) extends Mapping {
   def `type`: FieldType=FieldType.rank_features
   override def docValues: Option[Boolean] = None
   override def store: Boolean = false
@@ -412,6 +394,43 @@ object RankFeaturesMapping {
   implicit val jsonEncoder: JsonEncoder[RankFeaturesMapping] = DeriveJsonEncoder.gen[RankFeaturesMapping]
 }
 
+@jsonHint("knn_vector")
+final case class KnnVectorMapping(dimension:Int,
+                                  @jsonField("space_type") spaceType: Option[String] = None,
+                                  @jsonField("data_type") dataType: Option[String] = None,
+                                  @jsonField("mode") mode: Option[String] = None,
+                                  @jsonField("compression_level") compressionLevel: Option[String] = None,
+                                  @jsonField("model_id") modelId: Option[String] = None,
+                                  @jsonField("method") method: Option[KnnVectorMethod] = None,
+
+                                 ) extends Mapping {
+  def `type`: FieldType=FieldType.rank_features
+  override def docValues: Option[Boolean] = None
+  override def store: Boolean = false
+  override def index: Boolean = false
+  override def boost: Float = 1.0f
+  override def indexOptions: Option[IndexOptions] = None
+  override def similarity: Option[Similarity] = None
+  override def fields: Map[String, Mapping] = Map.empty
+  override def copyTo: Chunk[String] = Chunk.empty
+}
+
+
+object KnnVectorMapping {
+  implicit val jsonDecoder: JsonDecoder[KnnVectorMapping] = DeriveJsonDecoder.gen[KnnVectorMapping]
+  implicit val jsonEncoder: JsonEncoder[KnnVectorMapping] = DeriveJsonEncoder.gen[KnnVectorMapping]
+}
+
+case class KnnVectorMethod(name:String,
+                           @jsonField("space_type") spaceType: Option[String] = None,
+                           @jsonField("engine") engine: Option[String] = None,
+                           parameters: Option[Json.Obj]=None
+                          )
+
+object KnnVectorMethod {
+  implicit val jsonDecoder: JsonDecoder[KnnVectorMethod] = DeriveJsonDecoder.gen[KnnVectorMethod]
+  implicit val jsonEncoder: JsonEncoder[KnnVectorMethod] = DeriveJsonEncoder.gen[KnnVectorMethod]
+}
 
 @jsonHint("boolean")
 final case class BooleanMapping(@jsonField("null_value") nullValue: Option[Boolean] = None, @jsonField("doc_values") docValues: Option[Boolean] = None, @JsonNoDefault store: Boolean = false, @JsonNoDefault index: Boolean = true, @JsonNoDefault boost: Float = 1.0f, @jsonField("index_options") indexOptions: Option[IndexOptions] = None, similarity: Option[Similarity] = None, @jsonField("copy_to") copyTo: Chunk[String] = Chunk.empty, fields: Map[String, Mapping] = Map.empty[String, Mapping]) extends Mapping {
@@ -467,8 +486,8 @@ implicit val jsonDecoder: JsonDecoder[DateNanosMapping] = DeriveJsonDecoder.gen[
 implicit val jsonEncoder: JsonEncoder[DateNanosMapping] = DeriveJsonEncoder.gen[DateNanosMapping]
 }
 
-@jsonHint("flattened")
-final case class FlattenedMapping(@JsonNoDefault norms: Boolean = false, 
+@jsonHint("flat_object")
+final case class FlatObjectMapping(@JsonNoDefault norms: Boolean = false,
                                   @jsonField("ignore_above") ignoreAbove: Option[Int] = None, 
                                   @jsonField("eager_global_ordinals") eagerGlobalOrdinals: Option[Boolean] = None, 
                                   @jsonField("doc_values") docValues: Option[Boolean] = None, 
@@ -481,13 +500,13 @@ final case class FlattenedMapping(@JsonNoDefault norms: Boolean = false,
                                   similarity: Option[Similarity] = None, 
                                   @jsonField("copy_to") copyTo: Chunk[String] = Chunk.empty, 
                                   fields: Map[String, Mapping] = Map.empty[String, Mapping]) extends Mapping {
-  def `type`: FieldType=FieldType.flattened
+  def `type`: FieldType=FieldType.flat_object
 }
 
 
-object FlattenedMapping {
-implicit val jsonDecoder: JsonDecoder[FlattenedMapping] = DeriveJsonDecoder.gen[FlattenedMapping]
-implicit val jsonEncoder: JsonEncoder[FlattenedMapping] = DeriveJsonEncoder.gen[FlattenedMapping]
+object FlatObjectMapping {
+implicit val jsonDecoder: JsonDecoder[FlatObjectMapping] = DeriveJsonDecoder.gen[FlatObjectMapping]
+implicit val jsonEncoder: JsonEncoder[FlatObjectMapping] = DeriveJsonEncoder.gen[FlatObjectMapping]
 }
 
 @jsonHint("percolator")
@@ -795,6 +814,8 @@ final case class RootDocumentMapping(@JsonNoDefault properties: Map[String, Mapp
                                      @JsonNoDefault dynamic: String = RootDocumentMapping.defaultDynamic,
                                      @JsonNoDefault enabled: Boolean = RootDocumentMapping.defaultEnabled,
                                      path: Option[String] = None, analyzer: Option[String] = None,
+                                     @jsonField("composite") composite: Option[Json.Obj] = None,
+                                     @jsonField("derived") derived: Option[Json.Obj] = None,
                                      @jsonField("index_analyzer") indexAnalyzer: Option[String] = None,
                                      @jsonField("search_analyzer") searchAnalyzer: Option[String] = None,
                                      @jsonField("dynamic_date_formats") dynamicDateFormats: Option[Chunk[String]] = None,
@@ -925,6 +946,25 @@ val typeName = "token_count"
 implicit val jsonDecoder: JsonDecoder[TokenCountMapping] = DeriveJsonDecoder.gen[TokenCountMapping]
 implicit val jsonEncoder: JsonEncoder[TokenCountMapping] = DeriveJsonEncoder.gen[TokenCountMapping]
 }
+
+
+@jsonHint("wildcard")
+final case class WildcardMapping(@JsonNoDefault norms: Boolean = false,
+                                 @jsonField("ignore_above") ignoreAbove: Option[Int] = None,
+                                 @jsonField("eager_global_ordinals") eagerGlobalOrdinals: Option[Boolean] = None,
+                                 @jsonField("doc_values") docValues: Option[Boolean] = None,
+                                 @jsonField("normalizer") normalizer: Option[String] = None,
+                                 @jsonField("null_value") nullValue: Option[String] = None,
+                                 @JsonNoDefault store: Boolean = false, @JsonNoDefault index: Boolean = true, @JsonNoDefault boost: Float = 1.0f, @jsonField("index_options") indexOptions: Option[IndexOptions] = None, similarity: Option[Similarity] = None, @jsonField("copy_to") copyTo: Chunk[String] = Chunk.empty, fields: Map[String, Mapping] = Map.empty[String, Mapping]) extends Mapping {
+  def `type`: FieldType=FieldType.wildcard
+}
+
+
+object WildcardMapping {
+  implicit val jsonDecoder: JsonDecoder[WildcardMapping] = DeriveJsonDecoder.gen[WildcardMapping]
+  implicit val jsonEncoder: JsonEncoder[WildcardMapping] = DeriveJsonEncoder.gen[WildcardMapping]
+}
+
 
 sealed trait InternalMapping extends Mapping {
   def NAME: FieldType

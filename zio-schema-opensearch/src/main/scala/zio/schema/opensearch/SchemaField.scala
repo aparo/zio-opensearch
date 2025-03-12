@@ -190,7 +190,7 @@ sealed trait SchemaField {
   def getField(name: String): Either[MissingFieldException, SchemaField]
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   def getFlatFields: Chunk[SchemaField]
 
@@ -582,7 +582,7 @@ final case class StringSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 }
@@ -719,7 +719,7 @@ final case class BinarySchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 }
@@ -937,7 +937,7 @@ final case class OffsetDateTimeSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 }
@@ -1048,7 +1048,7 @@ final case class LocalDateTimeSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1158,7 +1158,7 @@ final case class LocalDateSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1269,7 +1269,7 @@ final case class DoubleSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1380,7 +1380,7 @@ final case class BigIntSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1491,7 +1491,7 @@ final case class BigDecimalSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1630,7 +1630,7 @@ final case class IntSchemaField(
   )
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1741,7 +1741,7 @@ final case class BooleanSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -1879,7 +1879,7 @@ final case class LongSchemaField(
   )
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -2017,7 +2017,7 @@ final case class ShortSchemaField(
   )
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -2128,7 +2128,7 @@ final case class FloatSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -2265,7 +2265,7 @@ final case class ByteSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -2403,7 +2403,7 @@ final case class ListSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = items.getFlatFields
 
@@ -2514,7 +2514,7 @@ final case class RangeSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -2631,7 +2631,7 @@ final case class RefSchemaField(
     copy(modificationUser = modificationUser)
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] = Chunk(this)
 
@@ -2727,7 +2727,7 @@ final case class ObjectSchemaField(
   }
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   override def getFlatFields: Chunk[SchemaField] =
     this.fields.flatMap(_.getFlatFields).map(f => f.setName(s"${this.name}.${f.name}"))

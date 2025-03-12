@@ -15,11 +15,9 @@
  */
 
 package zio.opensearch.common.get
-import zio._
-import zio.opensearch.common.ShardStatistics
-import zio.opensearch.common.get_script_languages.LanguageContext
 import zio.json._
 import zio.json.ast._
+import zio.opensearch.common.ShardStatistics
 /*
  * Returns a document.
  * For more info refers to https://www.elastic.co/guide/en/opensearch/reference/master/docs-get.html
@@ -31,7 +29,6 @@ import zio.json.ast._
  */
 final case class GetResponse(
   @jsonField("_index") index: String,
-  @jsonField("_type") docType: String = "_doc",
   @jsonField("_id") id: String,
   @jsonField("_version") version: Long = 1,
   @jsonField("_shards") shards: ShardStatistics = ShardStatistics(),
@@ -41,7 +38,6 @@ final case class GetResponse(
 //                              error: Option[ErrorResponse] = None
 ) {
   def getId: String = id
-  def getType: String = docType
   def getIndex: String = index
   def getVersion: Long = version
 }

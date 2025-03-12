@@ -21,10 +21,10 @@ import zio.json._
 import zio.json.ast._
 final case class TemplateMapping(
   aliases: Map[String, Alias],
-  @jsonField("index_patterns") indexPatterns: Chunk[String],
+  @jsonField("index_patterns") indexPatterns: Chunk[String]=Chunk.empty,
   mappings: TypeMapping,
-  order: Int,
-  settings: Map[String, Json],
+  order: Option[Int]=None,
+  settings: Map[String, Json]=Map.empty ,
   version: Option[Int] = None
 )
 

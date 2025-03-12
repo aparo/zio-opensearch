@@ -27,8 +27,6 @@ case class BulkItemResult(original: BulkItemResponse) {
 
   def opType = original.opType
 
-  def `type` = original.docType
-
   def version = original.version
 
   def isFailure: Boolean = original.isFailed

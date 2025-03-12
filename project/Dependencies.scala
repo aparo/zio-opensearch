@@ -11,7 +11,7 @@ object Dependencies {
       "dev.zio" %% "zio-test-sbt" % Versions.zio,
       "org.opensearch" % "opensearch-testcontainers" % Versions.testContainerOpenSearch,
       "com.dimafeng" %% "testcontainers-scala-opensearch" % Versions.testContainerScala,
-      "ch.qos.logback" % "logback-core" % "1.4.6"
+      "ch.qos.logback" % "logback-core" % "1.5.17"
     ),
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
   )

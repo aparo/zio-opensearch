@@ -473,15 +473,9 @@ final case class QueryBuilder(
 
   def multiGet(
     index: String,
-    ids: Chunk[String],
-    docType: Option[String] = None
+    ids: Chunk[String]
   ): ZIO[Any, FrameworkException, Chunk[ResultDocument]] = {
-    val realdIds = docType match {
-      case Some(value) =>
-        ids.map(i => resolveId(value, i)).toList
-      case None =>
-        ids.toList
-    }
+    val realdIds = ids.toList
     ormManager.openSearchService.mget(getRealIndices(Chunk(index)).head, Chunk.fromIterable(realdIds)).map(_.docs)
   }
 

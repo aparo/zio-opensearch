@@ -52,6 +52,8 @@ object FieldType {
 
   case object murmur3 extends FieldType
 
+  case object wildcard extends FieldType
+
   case object token_count extends FieldType
 
   case object percolator extends FieldType
@@ -92,7 +94,9 @@ object FieldType {
 
   case object rank_features extends FieldType
 
-  case object flattened extends FieldType
+  case object knn_vector extends FieldType
+
+  case object flat_object extends FieldType
 
   case object shape extends FieldType
 
@@ -101,8 +105,6 @@ object FieldType {
   case object constant_keyword extends FieldType
 
   case object aggregate_metric_double extends FieldType
-
-  case object dense_vector extends FieldType
 
   case object match_only_text extends FieldType
 

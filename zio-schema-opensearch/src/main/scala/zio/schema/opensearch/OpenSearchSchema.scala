@@ -232,7 +232,7 @@ final case class OpenSearchSchema[T](
   }
 
   /**
-   * Return a list of fields flattened
+   * Return a list of fields flat_object
    */
   def getFlattenFields: Chunk[SchemaField] =
     fields.flatMap(_.getFlatFields)

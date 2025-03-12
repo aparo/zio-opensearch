@@ -74,7 +74,7 @@ trait MappingManager {
       mappings <- mappingsRef.get
     } yield Chunk.fromIterable(mappings.keys.toList.sorted)
 
-  def isGraph(index: String, docType: String): ZIO[Any, FrameworkException, Boolean] =
+  def isGraph(index: String): ZIO[Any, FrameworkException, Boolean] =
     for {
       _ <- refreshIfDirty()
       mappings <- mappingsRef.get

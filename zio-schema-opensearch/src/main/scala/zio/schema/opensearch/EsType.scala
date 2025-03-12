@@ -95,7 +95,7 @@ object OSType {
 
   case object rank_features extends OSType
 
-  case object flattened extends OSType
+  case object flat_object extends OSType
 
   case object shape extends OSType
 

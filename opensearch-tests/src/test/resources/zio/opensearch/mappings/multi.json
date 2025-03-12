@@ -1,0 +1,163 @@
+{
+  "multi": {
+    "aliases": {},
+    "mappings": {
+      "derived": {
+        "method": {
+          "type": "keyword",
+          "script": {
+            "source": "\n        emit(doc[\"request.keyword\"].value.splitOnToken(\" \")[1])\n        ",
+            "lang": "painless"
+          }
+        },
+        "size": {
+          "type": "long",
+          "script": {
+            "source": "\n        emit(Long.parseLong(doc[\"request.keyword\"].value.splitOnToken(\" \")[5]))\n        ",
+            "lang": "painless"
+          }
+        },
+        "timestamp": {
+          "type": "date",
+          "script": {
+            "source": "\n        emit(Long.parseLong(doc[\"request.keyword\"].value.splitOnToken(\" \")[0]))\n        ",
+            "lang": "painless"
+          },
+          "format": "MM/dd/yyyy"
+        }
+      },
+      "properties": {
+        "@timestamp": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_second"
+        },
+        "a": {
+          "type": "boolean"
+        },
+        "age": {
+          "type": "rank_feature",
+          "positive_score_impact": false
+        },
+        "binary_value": {
+          "type": "binary"
+        },
+        "clientip": {
+          "type": "keyword"
+        },
+        "date": {
+          "type": "date"
+        },
+        "date_nanos": {
+          "type": "date_nanos",
+          "format": "strict_date_optional_time_nanos"
+        },
+        "ip_address": {
+          "type": "ip"
+        },
+        "issue": {
+          "type": "flat_object"
+        },
+        "latency": {
+          "type": "scaled_float",
+          "scaling_factor": 10.0
+        },
+        "location": {
+          "type": "geo_shape"
+        },
+        "log_line": {
+          "type": "wildcard",
+          "doc_values": false
+        },
+        "my_vector": {
+          "type": "knn_vector",
+          "dimension": 3,
+          "space_type": "l2"
+        },
+        "point": {
+          "type": "geo_point"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "product_to_brand": {
+          "type": "join",
+          "eager_global_ordinals": true,
+          "relations": {
+            "brand": "product"
+          }
+        },
+        "rating": {
+          "type": "rank_feature"
+        },
+        "release_date": {
+          "type": "alias",
+          "path": "year"
+        },
+        "request": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "request_size": {
+          "type": "integer"
+        },
+        "search": {
+          "properties": {
+            "query": {
+              "type": "percolator"
+            }
+          }
+        },
+        "sentence": {
+          "type": "text",
+          "fields": {
+            "num_words": {
+              "type": "token_count",
+              "analyzer": "english"
+            }
+          }
+        },
+        "status": {
+          "type": "integer"
+        },
+        "suggestions": {
+          "type": "completion",
+          "analyzer": "simple",
+          "preserve_separators": true,
+          "preserve_position_increments": true,
+          "max_input_length": 50
+        },
+        "suggestions2": {
+          "type": "search_as_you_type",
+          "doc_values": false,
+          "max_shingle_size": 3
+        },
+        "title": {
+          "type": "match_only_text"
+        },
+        "year": {
+          "type": "date"
+        }
+      }
+    },
+    "settings": {
+      "index": {
+        "replication": {
+          "type": "DOCUMENT"
+        },
+        "number_of_shards": "1",
+        "provided_name": "multi",
+        "knn": "true",
+        "creation_date": "1741690974258",
+        "number_of_replicas": "1",
+        "uuid": "UjbTQVKsTH6rnyl21XQ5tA",
+        "version": {
+          "created": "136407927"
+        }
+      }
+    }
+  }
+}

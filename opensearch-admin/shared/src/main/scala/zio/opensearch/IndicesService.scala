@@ -935,7 +935,6 @@ trait IndicesService extends IndicesActionResolver {
 
   def putMapping(
     index: String,
-    docType: String,
     mapping: RootDocumentMapping
   ): ZIO[Any, FrameworkException, IndicesPutMappingResponse] =
     putMapping(indices = Seq(index), body = mapping.toJsonAST.toOption.get.asInstanceOf[Json.Obj])
@@ -1497,7 +1496,6 @@ trait IndicesService extends IndicesActionResolver {
 
   def putMapping(
     indices: Chunk[String],
-    docType: String,
     mapping: RootDocumentMapping
   ): ZIO[Any, FrameworkException, IndicesPutMappingResponse] =
     putMapping(

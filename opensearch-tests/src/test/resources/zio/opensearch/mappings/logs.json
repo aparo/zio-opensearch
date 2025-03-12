@@ -1,0 +1,59 @@
+{
+  "logs": {
+    "aliases": {},
+    "mappings": {
+      "derived": {
+        "method": {
+          "type": "keyword",
+          "script": {
+            "source": "\n        emit(doc[\"request.keyword\"].value.splitOnToken(\" \")[1])\n        ",
+            "lang": "painless"
+          }
+        },
+        "size": {
+          "type": "long",
+          "script": {
+            "source": "\n        emit(Long.parseLong(doc[\"request.keyword\"].value.splitOnToken(\" \")[5]))\n        ",
+            "lang": "painless"
+          }
+        },
+        "timestamp": {
+          "type": "date",
+          "script": {
+            "source": "\n        emit(Long.parseLong(doc[\"request.keyword\"].value.splitOnToken(\" \")[0]))\n        ",
+            "lang": "painless"
+          },
+          "format": "MM/dd/yyyy"
+        }
+      },
+      "properties": {
+        "clientip": {
+          "type": "keyword"
+        },
+        "request": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    "settings": {
+      "index": {
+        "replication": {
+          "type": "DOCUMENT"
+        },
+        "number_of_shards": "1",
+        "provided_name": "logs",
+        "creation_date": "1741688807048",
+        "number_of_replicas": "1",
+        "uuid": "rh4ATqhkQ8a07cZD3NLhSA",
+        "version": {
+          "created": "136407927"
+        }
+      }
+    }
+  }
+}
